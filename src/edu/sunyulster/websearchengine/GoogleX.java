@@ -44,7 +44,8 @@ public class GoogleX {
 				+ "2. Queries should be in either of these formats\n\tword AND/OR word\n\tword AND/OR word AND/OR ... word\n"
 				+ "3. Grouping parts of queries with parentheses is not supported at the moment,\n   so avoid queries like this\n\t(word and word) or (word and word)\n"
 				+ "4. Queries are evaluated left to right\n"
-				+ "5. Capitalization doesnt matter\n\n");
+				+ "5. Capitalization doesnt matter\n\n"
+				+ "Enter 'QUIT' to stop searching.\n\n");
 
 		String PROMPT = "[SEARCH]: ";
 		String QUIT = "QUIT";
