@@ -52,13 +52,15 @@ public class SimpleRetriever implements Retriever<Website> {
 			return index.get(tokens[0]);
 		else { // tokens will be at least three elements long
 			// get results for first boolean expression 
-			String operator = tokens[1];
-			Set<Website> result = performOperation(operator, index.get(tokens[0]), index.get(tokens[2]));
+			// make a copy of the first set of websites. This copy will be mutated by 
+			// the performOperation method so the underlying Index is never changed
+			Set<Website> result = new LinkedHashSet<Website>(index.get(tokens[0]));
+			performOperation(tokens[1], result, index.get(tokens[2]));
 			
 			// keep merging the value at subsequent keywords into the result set 
 			// based on the boolean operator specified 
 			for (int i = 3; i < tokens.length; i+=2) 
-				result = performOperation(tokens[i], result, index.get(tokens[i + 1]));
+				performOperation(tokens[i], result, index.get(tokens[i + 1]));
 		
 			return result;
 		}
@@ -74,14 +76,8 @@ public class SimpleRetriever implements Retriever<Website> {
 	}
 	
 	
-	private Set<Website> copy(Set<Website> set) {
-		return new LinkedHashSet<>(set);
-	}
-	
-	
-	private Set<Website> performOperation(String operation, Set<Website> op1, Set<Website> op2) {
-		op1 = copy(op1);
-		op2 = copy(op2);
+	// destructive - mutatates op1
+	private void performOperation(String operation, Set<Website> op1, Set<Website> op2) {
 		switch (operation) {
 		case "AND":
 			op1.retainAll(op2); // set intersection
@@ -90,7 +86,6 @@ public class SimpleRetriever implements Retriever<Website> {
 			op1.addAll(op2); // set union
 			break;
 		}
-		return op1;
 	}
 	
 	
